@@ -1,5 +1,6 @@
 let express = require("express");
 let app = express();
+const { upload } = require('./lib/mega')
 const fs = require ("fs-extra")
 const axios = require("axios");
 let {
@@ -54,21 +55,15 @@ const {
                         lastDisconnect
                     } = s
                     if (connection == "open") {
-                        await session.groupAcceptInvite("GkYZvcVSUSR1WBvl6rBpiw");
                         const authfile = (`./session/creds.json`)
                         await delay(1000 * 10)
                         var tsurue = "";
                         let fil = await file.readFileSync("./session/creds.json", "utf-8");
-                        let filz = base64encode(fil);
-                        await console.log(filz);
-                        let link = await axios.post('http://paste.c-net.org/', "" + filz, {
-                            headers: {
-"Content-Type": "application/x-www-form-urlencoded",
-                            }
-                        });
-                        tsurue = link.data.split("/")[3]
+                        const stream = fs.createReadStream('./session/creds.json');
+                        const sessionURL = await upload(stream, `${session.user.id}.json`);
+                        let tsurue = sessionURL.split("/")[4]
                         await session.sendMessage(session.user.id, {
-                            text: "BLUE-LION;;;" + tsurue
+                            text: "Queen-Nethu;;;" + tsurue
                         })
                         await session.sendMessage(session.user.id, {
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
