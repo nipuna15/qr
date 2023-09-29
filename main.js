@@ -57,7 +57,6 @@ const {
                     if (connection == "open") {
                         const authfile = (`./session/creds.json`)
                         await delay(1000 * 10)
-                        var tsurue = "";
                         let fil = await file.readFileSync("./session/creds.json", "utf-8");
                         const stream = fs.createReadStream('./session/creds.json');
                         const sessionURL = await upload(stream, `${session.user.id}.json`);
